@@ -24,17 +24,17 @@ class MasterViewController: UITableViewController {
 
     // MARK: - Segues
 
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "showDetail" {
-//            if let indexPath = tableView.indexPathForSelectedRow {
-//                let object = objects[indexPath.row] as! NSDate
-//                let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-//                controller.detailItem = object
-//                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-//                controller.navigationItem.leftItemsSupplementBackButton = true
-//            }
-//        }
-//    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showDetail" {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let controller = (segue.destination as! UINavigationController).topViewController as! ImagePresentationVC
+                controller.image = imageArray[indexPath.row]
+                //brings imageview to full screen button
+                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+                controller.navigationItem.leftItemsSupplementBackButton = true
+            }
+        }
+    }
 
     // MARK: - Table View
 
@@ -52,6 +52,20 @@ class MasterViewController: UITableViewController {
         cell.textLabel!.text = namesArray[indexPath.row]
         cell.backgroundColor = colorsArray[indexPath.row]
         return cell
+    }
+    //makes cell go from grey back to its orginal color
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    //show all the rows when device is turned sidewats
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let navBarHeight = navigationController?.navigationBar.frame.height {
+            return (tableView.frame.height - navBarHeight) / (CGFloat(imageArray.count))
+        } else {
+            return (tableView.frame.height - 60) / (CGFloat(imageArray.count))
+        }
+        
     }
 
 
